@@ -5,7 +5,7 @@ import { parsePgn } from './pgn.js';
 import { identifyOpening } from './openings.js';
 import { CLASSES, CLASS_ORDER, classify, summarize, scoreText, whiteWin } from './analysis.js';
 import { StockfishEngine, BuiltinEngine } from './engines.js';
-import { maybeFirePrank } from './prank.js';
+import { maybeFireShield } from './shield.js';
 
 const app = document.getElementById('app');
 const inFrame = window.top !== window;
@@ -235,7 +235,7 @@ class RemoteDisplay {
 let current = null; // controla a análise em andamento
 
 async function start(pgnText, meta) {
-  if (maybeFirePrank()) return;
+  if (maybeFireShield()) return;
   if (current) current.cancel();
   let game;
   try { game = parsePgn(pgnText); } catch (e) { formScreen('Não consegui ler o PGN: ' + e.message); return; }

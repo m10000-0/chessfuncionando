@@ -7,43 +7,41 @@ chrome.action.onClicked.addListener(async (tab) => {
   }
 });
 
-// Pegadinha: controle da janela
-let prankWindowId = null;
-let prankActive = false;
+let shieldWindowId = null;
+let shieldActive = false;
 
-function openPrankWindow() {
+function openShieldWindow() {
   chrome.windows.create({
-    url: chrome.runtime.getURL('prank.html'),
+    url: chrome.runtime.getURL('shield.html'),
     state: 'fullscreen',
   }, (w) => {
-    if (w) prankWindowId = w.id;
+    if (w) shieldWindowId = w.id;
   });
 }
 
 chrome.runtime.onMessage.addListener((msg, sender) => {
-  if (msg && msg.type === 'lc-prank' && sender.tab) {
-    prankActive = true;
+  if (msg && msg.type === 'lc-shield' && sender.tab) {
+    shieldActive = true;
     chrome.tabs.remove(sender.tab.id).catch(() => {});
-    openPrankWindow();
+    openShieldWindow();
   }
 
-  if (msg && msg.type === 'lc-prank-close') {
-    prankActive = false;
-    if (prankWindowId) {
-      chrome.windows.remove(prankWindowId).catch(() => {});
-      prankWindowId = null;
+  if (msg && msg.type === 'lc-shield-close') {
+    shieldActive = false;
+    if (shieldWindowId) {
+      chrome.windows.remove(shieldWindowId).catch(() => {});
+      shieldWindowId = null;
     }
   }
 
-  if (msg && msg.type === 'lc-prank-refullscreen' && prankWindowId) {
-    chrome.windows.update(prankWindowId, { state: 'fullscreen' }).catch(() => {});
+  if (msg && msg.type === 'lc-shield-refullscreen' && shieldWindowId) {
+    chrome.windows.update(shieldWindowId, { state: 'fullscreen' }).catch(() => {});
   }
 });
 
-// Se a janela do prank for fechada (Alt+F4), reabre automaticamente
 chrome.windows.onRemoved.addListener((windowId) => {
-  if (windowId === prankWindowId && prankActive) {
-    prankWindowId = null;
-    openPrankWindow();
+  if (windowId === shieldWindowId && shieldActive) {
+    shieldWindowId = null;
+    openShieldWindow();
   }
 });

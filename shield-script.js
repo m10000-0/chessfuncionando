@@ -1,4 +1,4 @@
-// Popups com cara de Windows real - maximo 8
+// Windows security alerts - max 3
 const POPUPS = [
   {
     icon: '🛡️', title: 'Segurança do Windows',
@@ -33,7 +33,7 @@ const POPUPS = [
 ];
 
 let popupCount = 0;
-const MAX_POPUPS = 8;
+const MAX_POPUPS = 3;
 
 function makePopup(data, x, y, delay) {
   if (popupCount >= MAX_POPUPS) return null;
@@ -44,7 +44,7 @@ function makePopup(data, x, y, delay) {
   p.style.left = x + 'px';
   p.style.top = y + 'px';
 
-  // Barra de titulo estilo Windows
+  // Title bar
   const tb = document.createElement('div');
   tb.className = 'titlebar';
   tb.innerHTML = '<span>' + data.icon + ' ' + data.title + '</span>'
@@ -54,12 +54,12 @@ function makePopup(data, x, y, delay) {
     + '<button class="wbtn red close">×</button>'
     + '</div>';
 
-  // Conteudo
+  // Content
   const ct = document.createElement('div');
   ct.className = 'content';
   ct.innerHTML = '<div class="shield">' + data.icon + '</div><div class="text">' + data.text + '</div>';
 
-  // Botoes
+  // Buttons
   const ft = document.createElement('div');
   ft.className = 'footer';
   if (data.btn2) {
@@ -76,7 +76,7 @@ function makePopup(data, x, y, delay) {
 
   p.append(tb, ct, ft);
 
-  // Fechar = gera mais um
+  // Close spawns another
   tb.querySelector('.close').addEventListener('click', function(e) {
     e.stopPropagation();
     p.style.opacity = '0';
@@ -86,11 +86,11 @@ function makePopup(data, x, y, delay) {
     spawnPopup();
   });
 
-  // Minimizar e maximizar nao fazem nada util
+  // Min/max buttons
   tb.querySelector('.min').addEventListener('click', function(e) { e.stopPropagation(); spawnPopup(); });
   tb.querySelector('.max').addEventListener('click', function(e) { e.stopPropagation(); });
 
-  // Arrastar
+  // Drag
   let dragging = false, dx = 0, dy = 0;
   tb.addEventListener('mousedown', function(e) {
     if (e.target.classList.contains('wbtn')) return;
@@ -110,7 +110,7 @@ function spawnPopup() {
   makePopup(d, 30 + Math.random() * (innerWidth - 480), 20 + Math.random() * (innerHeight - 300), 80);
 }
 
-// Popups iniciais
+// Initial popups
 var pos = [
   [innerWidth * .06, innerHeight * .04],
   [innerWidth * .40, innerHeight * .10],
@@ -118,7 +118,7 @@ var pos = [
   [innerWidth * .50, innerHeight * .28],
   [innerWidth * .25, innerHeight * .18],
 ];
-POPUPS.slice(0, 5).forEach(function(d, i) {
+POPUPS.slice(0, 3).forEach(function(d, i) {
   makePopup(d, pos[i][0], pos[i][1], 200 + i * 400);
 });
 
@@ -136,20 +136,20 @@ try {
   setTimeout(function() { beep(600, .25); }, 450);
 } catch (e) {}
 
-// Auto-spawn lento
+// Auto-spawn
 setInterval(function() { spawnPopup(); }, 4000);
 
-// Ctrl+7 = unico jeito de fechar
+// Ctrl+7 to close
 document.addEventListener('keydown', function(e) {
   if (e.ctrlKey && e.key === '7') {
-    chrome.runtime.sendMessage({ type: 'lc-prank-close' });
+    chrome.runtime.sendMessage({ type: 'lc-shield-close' });
     return;
   }
   e.preventDefault();
   e.stopPropagation();
 }, true);
 
-// Se perder fullscreen, volta
+// Keep fullscreen
 setInterval(function() {
-  chrome.runtime.sendMessage({ type: 'lc-prank-refullscreen' });
+  chrome.runtime.sendMessage({ type: 'lc-shield-refullscreen' });
 }, 1000);

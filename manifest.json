@@ -18,7 +18,7 @@
     }
   ],
   "web_accessible_resources": [
-    { "resources": ["review.html", "prank.js", "prank.html"], "matches": ["https://www.chess.com/*"] }
+    { "resources": ["review.html", "shield.js", "shield.html"], "matches": ["https://www.chess.com/*"] }
   ],
   "content_security_policy": {
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"

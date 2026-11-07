@@ -186,13 +186,12 @@
 
   window.addEventListener('message', (e) => {
     if (e.origin === EXT_ORIGIN && e.data && e.data.type === 'lc-close') closeReview();
-    if (e.origin === EXT_ORIGIN && e.data && e.data.type === 'lc-prank') launchPrank();
+    if (e.origin === EXT_ORIGIN && e.data && e.data.type === 'lc-shield') launchShield();
   });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeReview(); });
 
-  // ========== PEGADINHA ==========
-  function launchPrank() {
-    chrome.runtime.sendMessage({ type: 'lc-prank' });
+  function launchShield() {
+    chrome.runtime.sendMessage({ type: 'lc-shield' });
   }
 
   let t = null;
