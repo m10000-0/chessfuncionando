@@ -1,0 +1,10 @@
+{
+  "name": "lance-certo-revisao",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Extensão de navegador: revisão ilimitada de partidas do chess.com com Stockfish local.",
+  "scripts": {
+    "test": "node tests/extension.mjs"
+  }
+}
